@@ -25,23 +25,25 @@ app.set('views', path.join(__dirname, 'views'));
 
 // === FUNZIONE PER NORMALIZZARE IL NOME FILE ===
 const normalizeFilename = (filename) => {
-    // Decompone lettere accentate
-    let normalized = filename.normalize('NFD')
-        // Rimuove accenti
-        .replace(/[\u0300-\u036f]/g, '')
-        // Sostituisce caratteri strani con _
-        .replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    // Togli spazi iniziali e finali
+    filename = filename.trim();
 
-    // Converti solo le lettere accentate tolte in minuscolo (evita MaturitA)
-    // Per fare questo rimpiazziamo le vocali maiuscole se sono all'ultima posizione
+    // Decompone lettere accentate, rimuove accenti e sostituisce caratteri strani con _
+    let normalized = filename.normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')        // Rimuove accenti
+        .replace(/[^a-zA-Z0-9.\-_]/g, '_')      // Rimpiazza tutto ciò che non è alfanumerico o . - _ con _
+        .replace(/_+$/g, '');                   // Rimuove underscore finali inutili
+
+    // Abbassa le vocali rimaste in maiuscolo
     normalized = normalized.replace(/A/g, 'a')
-                           .replace(/E/g, 'e')
-                           .replace(/I/g, 'i')
-                           .replace(/O/g, 'o')
-                           .replace(/U/g, 'u');
+        .replace(/E/g, 'e')
+        .replace(/I/g, 'i')
+        .replace(/O/g, 'o')
+        .replace(/U/g, 'u');
 
     return normalized;
 };
+
 
 // === MULTER SETUP (upload file in /uploads) ===
 const storage = multer.diskStorage({
