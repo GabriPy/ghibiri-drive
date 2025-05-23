@@ -45,7 +45,7 @@
         .bottone-chiudi {
             position: absolute;
             bottom: 100px;
-            left: 330px;
+            left: 295px;
             border: none;
             background-color: transparent;
             transform: scaleX(1.2);
@@ -88,6 +88,26 @@
 </head>
 
 <body>
+    <div class="modal" id="storageModal">
+        <div class="modal-background"></div>
+        <div class="modal-card" style="border-radius: 1rem;">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Spazio del drive</p>
+                <button class="delete" aria-label="close" onclick="closeStorageModal()"></button>
+            </header>
+            <section class="modal-card-body">
+                <progress class="progress is-info" id="storageBar" value="0" max="100">0%</progress>
+                <p id="storageText"></p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Bottone per aprire -->
+    <!-- <button class="button is-info" onclick="openStorageModal()">Controlla Spazio Disco</button> -->
+
+
+
+
     <div class="contenitore">
         <nav class="navbar is-white">
             <div class="navbar-brand">
@@ -95,9 +115,40 @@
                     🍏 GhibiriDrive
                 </a>
             </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button" onclick="openStorageModal()">
+                            Controlla spazio disco
+                        </a>
+                        <script>
+                            function openStorageModal() {
+                                fetch('/api/storage')
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        const bar = document.getElementById('storageBar');
+                                        const text = document.getElementById('storageText');
+                                        bar.value = data.percentUsed;
+                                        bar.innerText = `${data.percentUsed.toFixed(1)}%`;
+                                        text.innerText = `Usato: ${(data.used / 1073741824).toFixed(2)} GB / ${(data.total / 1073741824).toFixed(2)} GB`;
+                                        document.getElementById('storageModal').classList.add('is-active');
+                                    })
+                                    .catch(err => {
+                                        console.error('Errore:', err);
+                                        alert('Errore nel caricare lo spazio disco');
+                                    });
+                            }
+
+                            function closeStorageModal() {
+                                document.getElementById('storageModal').classList.remove('is-active');
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
         </nav>
 
-        <div class="columns m-0">
+        <div class=" columns m-0">
             <div class="column is-3 sidebar">
                 <aside class="menu">
                     <p class="menu-label">Navigazione</p>
@@ -117,7 +168,8 @@
                                                 </span>
                                                 <span class="file-label"> Choose a file… </span>
                                             </span>
-                                            <span class="file-name" id="file-name"> Nessun file selezionato </span>
+                                            <span class="file-name" id="file-name"> Nessun file
+                                                selezionato </span>
                                         </label>
                                         <script>
                                             const fileInput = document.getElementById('file-upload');
@@ -141,7 +193,7 @@
                 </aside>
             </div>
 
-            <div class="column is-10 p-4 ">
+            <div class="column is-9 p-4 ">
                 <% if (files.length===0) { %>
                     <p class="subtitle has-text-centered">Nessun file caricato ancora.</p>
                     <% } else { %>

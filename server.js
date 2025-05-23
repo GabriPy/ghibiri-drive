@@ -4,8 +4,12 @@ const session = require('express-session');
 const path = require('path');
 const fs = require('fs');
 
+
 const app = express();
 const PORT = 23456;
+
+
+
 
 // === PASSWORD SEGRETA PER ENTRARE ===
 const ACCESS_PASSWORD = 'stronati2025';
@@ -124,4 +128,24 @@ app.get('/logout', (req, res) => {
 // === AVVIO SERVER ===
 app.listen(PORT, () => {
     console.log(`🚀 GhibiriDrive attivo su http://localhost:${PORT}`);
+});
+
+
+// === CONTROLLO SPAZIO DISCO E MEMORIZZAZIONE IN /API/STORAGE
+const checkDiskSpace = require('check-disk-space').default;
+
+app.get('/api/storage', (req, res) => {
+    const diskPath = process.platform === 'win32' ? 'C:' : '/';
+    checkDiskSpace(diskPath).then((diskSpace) => {
+        const { free, size } = diskSpace;
+        const used = size - free;
+        const percentUsed = (used / size) * 100;
+        res.json({
+            used,
+            total: size,
+            percentUsed
+        });
+    }).catch(err => {
+        res.status(500).json({ error: 'Errore nel leggere lo spazio disco' });
+    });
 });
