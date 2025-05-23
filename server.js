@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 80;
+const PORT = 23456;
 
 // === PASSWORD SEGRETA PER ENTRARE ===
 const ACCESS_PASSWORD = 'stronati2025';
