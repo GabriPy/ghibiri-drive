@@ -1,181 +1,197 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en" style="height: 100vh; background-color: #f4f4f7;">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>GhibiriDrive - Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GhibiriDrive Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" />
+    <style>
+        body {}
+
+        .contenitore {}
+
+        .navbar {
+            border-radius: 1rem;
+            margin: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 0rem 1rem 1rem 0rem;
+            padding: 1rem;
+            margin-top: 15px;
+            height: 70vh;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card {
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .icon-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .bottone-chiudi {
+            position: absolute;
+            bottom: 100px;
+            left: 330px;
+            border: none;
+            background-color: transparent;
+            transform: scaleX(1.2);
+        }
+
+        .bottone-chiudi:hover {
+            cursor: pointer;
+            color: red
+        }
+
+        .btn-download {
+            border-radius: 10px !important;
+            font-size: 110% !important;
+            width: 80%;
+        }
+
+        .btn-download:hover {
+            background-color: rgb(234, 234, 234);
+        }
+
+        .file-input-ghib {
+            display: none;
+        }
+
+        .carica-file:hover {
+            background-color: transparent !important;
+            cursor: default;
+        }
+
+        .file-name {
+            opacity: 0.6 !important;
+        }
+
+        .btn-upload {
+            margin-left: 50px;
+            margin-top: 20px;
+            width: 75%;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="d-flex justify-content-center align-items-center" style="height:100px; background-color: #CCD5AE;">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col"></div>
-        <div class="col-3 centered">
-          <h1 class="navbar-brand centered">GhibiriDrive</h1>
-        </div>
-        <div class="col"></div>
-      </div>
-      <div class="row">
-        <div class="col"></div>
-        <div class="col-3">
-          <a href="/logout" class="btn d-block mx-auto w-25 btn-outline-danger">Esci</a>
-        </div>
-        <div class="col"></div>
-      </div>
-    </div>
-  </div>
+    <div class="contenitore">
+        <nav class="navbar is-white">
+            <div class="navbar-brand">
+                <a class="navbar-item has-text-weight-bold" href="#">
+                    🍏 GhibiriDrive
+                </a>
+            </div>
+        </nav>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-3"></div>
-      <div class="col mt-4">
-        <h4 class="mb-3 centered">Carica un file</h4>
-        <form action="/upload" method="POST" enctype="multipart/form-data" class="mb-5 d-flex gap-2" style="">
-          <input type="file" name="file" required class="form-control" style="background-color: #FAEDCD;" />
-          <button type="submit" class="btn btn-upload">Carica</button>
-        </form>
-      </div>
-      <div class="col-3"></div>
-    </div>
+        <div class="columns m-0">
+            <div class="column is-3 sidebar">
+                <aside class="menu">
+                    <p class="menu-label">Navigazione</p>
+                    <ul class="menu-list">
+                        <li><a class="is-active">Drive</a></li>
+                        <li>
+                            <a class="carica-file" style="margin-top:150px">
+                                <div class="file has-name is-fullwidth">
+                                    <form style="width: 100%;" action="/upload" method="POST"
+                                        enctype="multipart/form-data">
+                                        <!-- <div class="file has-name is-fullwidth"> -->
+                                        <label class="file-label">
+                                            <input id="file-upload" class="file-input" type="file" name="file" />
+                                            <span class="file-cta">
+                                                <span class="file-icon">
+                                                    <i class="fas fa-upload"></i>
+                                                </span>
+                                                <span class="file-label"> Choose a file… </span>
+                                            </span>
+                                            <span class="file-name" id="file-name"> Nessun file selezionato </span>
+                                        </label>
+                                        <script>
+                                            const fileInput = document.getElementById('file-upload');
+                                            const fileName = document.getElementById('file-name');
 
+                                            fileInput.addEventListener('change', () => {
+                                                if (fileInput.files.length > 0) {
+                                                    fileName.textContent = fileInput.files[0].name;
+                                                } else {
+                                                    fileName.textContent = 'Nessun file selezionato';
+                                                }
+                                            });
+                                        </script>
+                                        <!-- </div> -->
+                                        <button type="submit" class="btn btn-upload">Carica</button>
+                                    </form>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-3"></div>
-        <div class="col">
-
-        </div>
-        <div class="col-3"></div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-1"></div>
-        <div class="col">
-          <h4 class="mb-3 centered">I tuoi file</h4>
-          <% if (files.length===0) { %>
-            <p class="centered">Nessun file caricato ancora.</p>
-            <% } else { %>
-              <div class="row g-3">
-                <% files.forEach(function(file) { const originalName=file.replace(/^\d+-/, '' ); let icon='📄' ; const
-                  ext=originalName.split('.').pop().toLowerCase(); if (['png', 'jpg' , 'jpeg' , 'gif' , 'bmp' , 'svg'
-                  ].includes(ext)) icon='🖼️' ; else if (['zip', 'rar' , '7z' , 'tar' , 'gz' ].includes(ext)) icon='🗜️'
-                  ; else if (['mp4', 'avi' , 'mov' , 'mkv' ].includes(ext)) icon='🎥' ; else if (['mp3', 'wav' , 'flac'
-                  ].includes(ext)) icon='🎵' ; %>
-                  <div class="col-sm-6 col-md-4 col-lg-4">
-                    <div class="file-card p-3 shadow-sm rounded bg-white d-flex flex-column h-100">
-                      <div class="d-flex align-items-center mb-2">
-                        <div class="file-icon fs-3 me-2">
-                          <%= icon %>
+            <div class="column is-10 p-4 ">
+                <% if (files.length===0) { %>
+                    <p class="subtitle has-text-centered">Nessun file caricato ancora.</p>
+                    <% } else { %>
+                        <div class="columns is-multiline">
+                            <% files.forEach(function(file) { var originalName=file.replace(/^\d+-/, '' ); var icon='📄'
+                                ; var ext=originalName.split('.').pop().toLowerCase(); if (['png', 'jpg' , 'jpeg'
+                                , 'gif' , 'bmp' , 'svg' ].includes(ext)) icon='🖼️' ; else if (['zip', 'rar' , '7z'
+                                , 'tar' , 'gz' ].includes(ext)) icon='🗜️' ; else if (['mp4', 'avi' , 'mov' , 'mkv'
+                                ].includes(ext)) icon='🎥' ; else if (['mp3', 'wav' , 'flac' ].includes(ext)) icon='🎵'
+                                ; %>
+                                <div class="column is-3">
+                                    <div class="card">
+                                        <div class="card-content has-text-centered">
+                                            <span class="icon is-large">
+                                                <span class="mr-2" style="font-size: 1.5rem; margin-top: -10px">
+                                                    <%= icon %>
+                                                </span>
+                                            </span>
+                                            <p class="icon-text mt-2">
+                                                <span class="" title="<%= originalName %>">
+                                                    <%= originalName %>
+                                                </span>
+                                            </p>
+                                            <form method="POST" action="/delete" onsubmit="return confirmDelete()"
+                                                class="is-flex gap-2">
+                                                <a href="/download/<%= encodeURIComponent(file) %>"
+                                                    class="button btn-download is-small"
+                                                    style="margin-left: auto; margin-right: auto;"><i
+                                                        class="fa-solid fa-download"></i></a>
+                                                <input type="hidden" name="filename" value="<%= file %>">
+                                                <button type="submit" class="is-small bottone-chiudi"
+                                                    style="font-size: 120%;"><i class="fa-solid fa-x"></i></button>
+                                                <script>
+                                                    function confirmDelete() {
+                                                        return confirm("Sei sicuro di voler eliminare questo file? ⚠️ Non lo recuperi più eh frari.");
+                                                    }
+                                                </script>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
                         </div>
-                        <div class="file-name" data-bs-toggle="tooltip" title="<%= originalName %>">
-                          <%= originalName %>
-                        </div>
-                      </div>
-                      <form method="POST" action="/delete" onsubmit="return confirmDelete()"
-                        class="mt-auto d-flex justify-content-between gap-2">
-                        <a href="/download/<%= encodeURIComponent(file) %>"
-                          class="btn btn-download btn-sm flex-fill">Scarica</a>
-                        <input type="hidden" name="filename" value="<%= file %>">
-                        <button type="submit" class="btn btn-danger btn-sm flex-fill">Elimina</button>
-                      </form>
-                    </div>
-                  </div>
-                  <% }); %>
-              </div>
-              <% } %>
+                        <% } %>
+            </div>
         </div>
-        <div class="col-1"></div>
-      </div>
     </div>
-
-  </div>
-
-  <script>
-    const tooltipTriggerList = [...document.querySelectorAll('[data-bs-toggle="tooltip'])]
-      tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
-
-    function confirmDelete() {
-      return confirm('Sei sicuro di voler eliminare sto file, nenno?');
-    }
-  </script>
-
-  <style>
-    h1 {
-      font-size: 150% !important
-    }
-
-    h4, p {
-      color: #FEFAE0 !important
-    }
-
-    input[type="file"] {
-      background-color: #FAEDCD !important;
-    }
-
-    p {
-      opacity: 0.6;
-      color: #FEFAE0 !important
-    }
-
-    .centered-m {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .centered {
-      text-align: center !important;
-    }
-
-    body {
-      background: #d4a373;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    }
-
-    .file-card {
-      min-height: 140px;
-    }
-
-    .file-icon {
-      font-size: 28px;
-      flex-shrink: 0;
-    }
-
-    .file-name {
-      font-weight: 500;
-      color: #202124;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-grow: 1;
-    }
-
-    .btn-upload {
-      background-color: #1a73e8;
-      color: white;
-      border: none;
-    }
-
-    .btn-upload:hover {
-      background-color: #155ab6;
-    }
-
-    .btn-download {
-      background-color: #e8f0fe;
-      color: #1967d2;
-      font-weight: 600;
-      border: none;
-    }
-
-    .btn-download:hover {
-      background-color: #d2e3fc;
-      color: #174ea6;
-    }
-  </style>
 </body>
+
+
+
 
 </html>
