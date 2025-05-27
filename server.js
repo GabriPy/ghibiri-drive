@@ -87,7 +87,7 @@ app.get('/dashboard', (req, res) => {
     if (!req.session.loggedIn) return res.redirect('/');
 
     const files = fs.readdirSync('./uploads');
-    res.render('dashboard', { files });
+    res.render('dashboard', { files, fs, path });
 });
 
 // === ROTTA: UPLOAD FILE ===

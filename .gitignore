@@ -1,6 +1,1 @@
-
-uploads/
-
-.env
-
-*.log
+/node_modules/
